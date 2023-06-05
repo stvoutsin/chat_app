@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Chat Application</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link rel="shortcut icon" href="static/images/favicon.ico">
+    <link rel="stylesheet" href="static/css/chat.css">
+    <script src="static/js/chat.js"></script>
+</head>
+<body>
+    <div class="chat-body card">
+        <div class="card-body">
+            {% if current_user is not none %}
+            <span style="float:right;">
+                Logged in as: {{ current_user }} | <a href="/api/logout">Sign out</a>
+            </span>
+            {% endif %}
+            <strong id="prof">Chat with: {{ users[friend_id].username }}</strong><h4 class="card-title text-center"> Chat Application </h4>
+            <hr>
+            <div id="messages">
+                {% for message in messages %}
+                <p>
+                    <strong> {{users[message.sender_id].username}} </strong>
+                    <span> {{message.message}} </span><br/>
+                    <span class="sentdate">{{message.created_at }} </span>
+
+                </p>
+                {% endfor %}
+            </div>
+            <form class="form-inline" id="chat-form">
+                <input name="chat_id" id="chat_id" value="{{ chat.id}}" type="hidden">
+                <input name="user_id" id="user_id" value="{{ user_id }}" type="hidden">
+                <input name="message" id="message" class="form-control" placeholder="Write your message">
+                <button id="send" type="submit" class="btn btn-primary">Send</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Chat Application</title>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link rel="shortcut icon" href="static/images/favicon.ico">
+    <link rel="stylesheet" href="static/css/home.css">
+    <script src="static/js/home.js"></script>
+</head>
+<body>
+    <div class="chat-body card">
+        <div class="card-body">
+            {% if current_user is not none %}
+            <span style="float:right;">
+                Logged in as: {{ current_user }} | <a href="/api/logout">Sign out</a>
+            </span>
+            {% endif %}
+            <h4 class="card-title text-center"> Chat Application</h4>
+            <hr>
+            {% if current_user is  none %}
+            <form id="login-form">
+                <div id="error" class="error alert alert-danger" role="alert" style="display:none"></div>
+                <input type="text" class="form-control" id="user_input" placeholder="Username"><br/>
+                <input type="password" class="form-control" id="pass_input" placeholder="Password"><br/>
+                <button id="start" type="submit" class="btn btn-primary">Log in</button>
+            </form>
+            {% endif %}
+
+            {% if current_user is not none %}
+            <div id="chats">
+                {% for chat in chats %}
+                <p>
+                    <a href="/{{ chat.id }}"> {{users[chat.friend_id].username}} & {{users[chat.user_id].username}} </a>
+                </p>
+                {% endfor %}
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>

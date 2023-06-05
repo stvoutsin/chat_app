@@ -1,0 +1,32 @@
+version: "3"
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    depends_on:
+      - broker
+    volumes:
+      - ./chat_app/chat_app.db:/chat_app/chat_app.db  # Map the 'db' directory on the host to '/app/db' inside the container
+    restart: always  # Optional: Enable automatic restart of the app service
+  broker:
+    image: rabbitmq:3.9.12
+    ports:
+      - "5672:5672"
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
+    restart: always  # Optional: Enable automatic restart of the broker service
+  worker:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: celery -A chat_app.tasks worker --loglevel=info
+    depends_on:
+      - app
+      - broker
+    volumes:
+      - ./chat_app/chat_app.db:/chat_app/chat_app.db  # Map the 'db' directory on the host to '/app/db' inside the container
+    restart: always  # Optional: Enable automatic restart of the worker service
